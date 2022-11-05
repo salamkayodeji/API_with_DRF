@@ -32,7 +32,7 @@ urlpatterns = [
         title="Todo Micro-Service",
         description="API developers hoping to use our service"
     ), name='openapi-schema'),
-    path('docs/', TemplateView.as_view(
+    path('', TemplateView.as_view(
         template_name='todo/documentation.html',
         extra_context={'schema_url':'openapi-schema'}
     ), name='swagger-ui'),
