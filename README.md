@@ -86,11 +86,11 @@ with the following endpoints
 
 Endpoint |HTTP Method | CRUD Method | Result
 -- | -- |-- |--
-`todo` | GET | READ | Get all movies
-`todo/:id` | GET | READ | Get a single movie
-`todo`| POST | CREATE | Create a new movie
-`todo/:id` | PUT | UPDATE | Update a movie
-`todo/:id` | DELETE | DELETE | Delete a movie
+`todo` | GET | READ | Get all Todo
+`todo/:id` | GET | READ | Get a Todo movie
+`todo`| POST | CREATE | Create a new Todo
+`todo/:id` | PUT | UPDATE | Update a Todo
+`todo/:id` | DELETE | DELETE | Delete a Todo
 
 ### EVENTS
 
