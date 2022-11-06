@@ -27,11 +27,10 @@ password = rootaccess1234
 
 ### 1. Visit https://pacific-stream-12949.herokuapp.com/
 
-### The project has two seperate API documentation visit anyone:
+### The navigate API documentation visit anyone:
 
-    ## Option 1: https://pacific-stream-12949.herokuapp.com/docs/  
+    ## https://pacific-stream-12949.herokuapp.com/docs/  
 
-    ## Option 2: https://pacific-stream-12949.herokuapp.com/api/docs/
 
 ## Structure
 In a RESTful API, endpoints (URLs) define the structure of the API and how end users access data from our application using the HTTP methods - GET, POST, PUT, DELETE. Endpoints should be logically organized around _collections_ and _elements_, both of which are resources.
@@ -41,7 +40,6 @@ ENDPOINT 1:, `todo`, so we will use the following URLS - `/todo/` and `/todo/<id
 ## Use
 We can test the API by visiting the api documentation :
 [API_DOCUMENTATION]{https://pacific-stream-12949.herokuapp.com/docs/}, 
-[API_DOCUMENTATION]{https://pacific-stream-12949.herokuapp.com/api/docs/}, 
 
 
 or we can use [Postman](https://www.postman.com/)
