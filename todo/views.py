@@ -1,7 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions, viewsets, status
+from rest_framework import authentication, viewsets, status
+from rest_framework.permissions import (
+    IsAuthenticated,
+    AllowAny,
+    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
+)
+
 from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
@@ -10,7 +17,6 @@ import json
 from .tokens import create_jwt_pair_for_user
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -39,17 +45,17 @@ class LoginView(APIView):
         return Response(data=content, status=status.HTTP_200_OK)
 
 class TodoViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
     
 class EventViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = EventSerializer
     queryset = Event.objects.all()
   
 @api_view(['GET'])  
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def Duplicate_List(request, pk):
     todo = Todo.objects.get(pk=pk)
     events = Event.objects.filter(todo= todo) 
@@ -68,7 +74,7 @@ def Duplicate_List(request, pk):
     return Response(event_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])  
+@permission_classes([IsAuthenticated])
 def Duplicate_Event(request, pk):
     event = get_object_or_404(Event, id= pk)
     new_event = Event.objects.create(todo = event.todo,
@@ -81,7 +87,7 @@ def Duplicate_Event(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])  
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def get_events(request, pk):
     todo = get_object_or_404(Todo, id= pk)
     event = Event.objects.filter(todo = todo)
@@ -93,7 +99,7 @@ def get_events(request, pk):
     
 
 @api_view(['GET']) 
-@permission_classes([permissions.IsAuthenticated]) 
+@permission_classes([IsAuthenticated])
 def get_events_todo(request, pk):
     todo = get_object_or_404(Todo, id= pk)
     event = Event.objects.filter(todo = todo)
@@ -106,7 +112,7 @@ def get_events_todo(request, pk):
 
 
 @api_view(['GET']) 
-@permission_classes([permissions.IsAuthenticated]) 
+@permission_classes([IsAuthenticated])
 def Get_Todo_Event(request):
     todo = Todo.objects.all()
     events = Event.objects.all()
