@@ -29,6 +29,8 @@ RUN python manage.py collectstatic --noinput
 
 #RUN python manage.py test --noinput
 
+RUN adduser -D myuser
+USER myuser
 
 
 # run gunicorn
