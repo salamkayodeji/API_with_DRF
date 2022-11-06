@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['localhost', '127.0.0.1', 'pacific-stream-12949.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1', 'https://pacific-stream-12949.herokuapp.com']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
