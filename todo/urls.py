@@ -22,7 +22,7 @@ router.register(r'event', views.EventViewSet, 'event'),
 urlpatterns = [
     path('', include(router.urls)),
     path("login/", views.LoginView.as_view(), name="login"),
-	path('duplicate_list/<int:pk>', views.Duplicate_List, name="duplicate-list"),
+	path('duplicate_todo/<int:pk>', views.Duplicate_Todo, name="duplicate-todo"),
 	path('duplicate_event/<int:pk>', views.Duplicate_Event, name="duplicate-event"),
     path('get_all/', views.Get_Todo_Event, name='get_all' ),
     path('get_event/<int:pk>', views.get_events, name='get_event' ),

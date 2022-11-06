@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Todo(models.Model):
+    """ Stores a Todo, related to :model:`auth.User`.    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -11,6 +12,7 @@ class Todo(models.Model):
 
 
 class Event(models.Model):
+    """ Stores an Event, related to :model:`auth.Todo`. """
     todo = models.ForeignKey(Todo, on_delete=models.CASCADE)
     event_name = models.CharField(max_length=200, default = "No Name")
     complete = models.BooleanField(default=False)

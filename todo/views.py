@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-import json
 from .tokens import create_jwt_pair_for_user
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
@@ -21,6 +20,8 @@ from django.contrib.auth import authenticate
 
 
 class LoginView(APIView):
+    """ This is used to authenticate user """
+
     permission_classes = []
 
     def post(self, request: Request):
@@ -44,19 +45,66 @@ class LoginView(APIView):
 
         return Response(data=content, status=status.HTTP_200_OK)
 
+#
 class TodoViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+    Return the given Todo takes params pk.
+
+    list:
+    Return a list of all the existing Todo.
+
+    create:
+    Create a new Tudo instance.
+    
+    update:
+    Update a given Todo instance
+    
+    delete:
+    Delete a given Todo instance
+
+    """
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
     
 class EventViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+    Return the given Event takes params pk.
+
+    list:
+    Return a list of all the existing Events.
+
+    create:
+    Create a new Event instance.
+    
+    update:
+    Update a given Event instance
+    
+    delete:
+    Delete a given Event instance
+
+    """
+
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = EventSerializer
     queryset = Event.objects.all()
   
 @api_view(['GET'])  
 @permission_classes([IsAuthenticated])
-def Duplicate_List(request, pk):
+def Duplicate_Todo(request, pk):
+    '''
+    It duplicate a give Todo and all events that foreign key to the and returns returns the Todo and Events 
+    created.
+
+            Parameters:
+                    pk (int): The id of the Todo to duplicated
+
+            Returns:
+                    response (dict): Dictionary of with the created Todo and Events
+    '''
+
     todo = Todo.objects.get(pk=pk)
     events = Event.objects.filter(todo= todo) 
     new_todo = Todo.objects.create(name = todo.name, user = request.user)
@@ -71,11 +119,25 @@ def Duplicate_List(request, pk):
     
     serializer = TodoSerializer(new_todo)
     event_serializer = EventSerializer(new_event, many = True)    
-    return Response(event_serializer.data, status=status.HTTP_200_OK)
+    return Response({
+            "**Todo**": serializer.data,
+            "**Event**": event_serializer.data
+        }, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Duplicate_Event(request, pk):
+    '''
+    It duplicate a give Event and returns returns the newly created Event 
+    created.
+
+            Parameters:
+                    pk (int): The id of the Event to duplicated
+
+            Returns:
+                    response (dict): Dictionary of with the created Events created
+    '''
+
     event = get_object_or_404(Event, id= pk)
     new_event = Event.objects.create(todo = event.todo,
                                     complete = event.complete,
@@ -89,6 +151,16 @@ def Duplicate_Event(request, pk):
 @api_view(['GET'])  
 @permission_classes([IsAuthenticated])
 def get_events(request, pk):
+    '''
+    Returns a list of all events where todo == pk.
+
+            Parameters:
+                    pk (int): The id of the Todo 
+
+            Returns:
+                    response (dict): Dictionary of the events returned
+    '''
+
     todo = get_object_or_404(Todo, id= pk)
     event = Event.objects.filter(todo = todo)
     serializer = EventSerializer(event, many=True)
@@ -101,6 +173,16 @@ def get_events(request, pk):
 @api_view(['GET']) 
 @permission_classes([IsAuthenticated])
 def get_events_todo(request, pk):
+    '''
+    Returns a Todos and a list of events with relationship with the Todo.
+
+            Parameters:
+                    pk (int): The id of the Todo 
+
+            Returns:
+                    response (dict): Dictionary with a Todo and a list of events
+    '''
+
     todo = get_object_or_404(Todo, id= pk)
     event = Event.objects.filter(todo = todo)
     serializer_event = EventSerializer(event, many=True)
@@ -114,6 +196,14 @@ def get_events_todo(request, pk):
 @api_view(['GET']) 
 @permission_classes([IsAuthenticated])
 def Get_Todo_Event(request):
+    '''
+    Returns a list of all Todos and a list of all events.
+
+
+            Returns:
+                    response (dict): Dictionary with all Todo and all events
+    '''
+
     todo = Todo.objects.all()
     events = Event.objects.all()
     todo_serializer = TodoSerializer(todo, many = True)    
